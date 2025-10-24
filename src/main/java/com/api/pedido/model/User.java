@@ -4,13 +4,16 @@ package com.api.pedido.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
 public class User {
 
 
@@ -25,4 +28,19 @@ public class User {
     private String phone;
 
     private String password;
+
+    @OneToMany(mappedBy = "client")
+    private List<Order> orders = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 }

@@ -1,6 +1,7 @@
 package com.api.pedido.model;
 
 
+import com.api.pedido.model.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +25,9 @@ public class Order {
     private Long id;
 
     private LocalDateTime moment;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
     @ManyToOne
     @JoinColumn(name = "client_id")

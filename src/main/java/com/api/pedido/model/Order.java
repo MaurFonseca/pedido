@@ -3,13 +3,12 @@ package com.api.pedido.model;
 
 import com.api.pedido.model.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_order")
@@ -33,6 +32,16 @@ public class Order {
     @JoinColumn(name = "client_id")
     private User client;
 
+    @OneToMany(mappedBy = "id.order")
+    @Setter(AccessLevel.NONE)
+    private Set<OrderItem> items = new HashSet<>();
+
+    public Order(Long id, LocalDateTime moment, OrderStatus orderStatus, User client) {
+        this.id = id;
+        this.moment = moment;
+        this.orderStatus = orderStatus;
+        this.client = client;
+    }
 
     @Override
     public boolean equals(Object o) {

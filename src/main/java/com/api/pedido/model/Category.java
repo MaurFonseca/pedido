@@ -2,10 +2,10 @@ package com.api.pedido.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -20,4 +20,12 @@ public class Category {
 
     private String name;
 
+    @Transient
+    @Setter(AccessLevel.NONE)
+    private Set<Product> products = new HashSet<>();
+
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

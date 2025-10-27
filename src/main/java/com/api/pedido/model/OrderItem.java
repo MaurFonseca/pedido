@@ -1,24 +1,39 @@
 package com.api.pedido.model;
 
 import com.api.pedido.model.pk.OrderItemPk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 
+@Entity
+@Getter
+@Setter
 public class OrderItem {
 
     @EmbeddedId
+    @Getter(AccessLevel.NONE)
     private OrderItemPk id = new OrderItemPk();
 
     private Integer quantity;
 
     private Double price;
 
-    public OrderItem(Product product, Order order, Integer quantity, Double price){
+
+    public OrderItem(){
+
+    }
+
+    public OrderItem(Order order, Product product, Integer quantity, Double price){
         id.setOrder(order);
         id.setProduct(product);
         this.quantity = quantity;
         this.price = price;
     }
 
+    @JsonIgnore
     public Order getOrder(){
         return id.getOrder();
     }
@@ -31,11 +46,12 @@ public class OrderItem {
        return id.getProduct();
     }
 
-    public void setProduct(){
-        id.setProduct(getProduct());
+    public void setProduct(Product product) {
+        id.setProduct(product);
     }
 
     public double subTotal(){
         return this.quantity * this.price;
     }
+
 }

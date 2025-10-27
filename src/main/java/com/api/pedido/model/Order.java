@@ -33,6 +33,7 @@ public class Order {
     @JoinColumn(name = "client_id")
     private User client;
 
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

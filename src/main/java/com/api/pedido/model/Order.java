@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "tb_order")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

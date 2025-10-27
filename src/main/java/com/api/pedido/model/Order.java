@@ -39,6 +39,14 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
+    public Double getTotal(){
+        double sum = 0.0;
+        for (OrderItem x : items){
+            sum += x.getSubTotal();
+        }
+        return sum;
+    }
+
     public Order(Long id, LocalDateTime moment, OrderStatus orderStatus, User client) {
         this.id = id;
         this.moment = moment;

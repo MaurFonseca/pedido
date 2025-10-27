@@ -50,7 +50,7 @@ public class OrderItem {
         id.setProduct(product);
     }
 
-    public double subTotal(){
+    public Double getSubTotal(){
         return this.quantity * this.price;
     }
 

@@ -1,6 +1,7 @@
 package com.api.pedido.service;
 
 
+import com.api.pedido.exception.ResourceNotFoundException;
 import com.api.pedido.model.User;
 import com.api.pedido.model.dto.UserRequest;
 import com.api.pedido.model.dto.UserResponse;
@@ -30,7 +31,7 @@ public class UserService {
 
     public UserResponse findById(Long id){
         return toResponse(userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Não encontrado esse usuário")));
+                .orElseThrow(()-> new ResourceNotFoundException("Resource not found, ID: "+ id + " Not Found")));
     }
 
     public UserResponse insert(UserRequest request){

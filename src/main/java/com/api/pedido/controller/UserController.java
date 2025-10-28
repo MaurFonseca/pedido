@@ -2,14 +2,15 @@ package com.api.pedido.controller;
 
 
 import com.api.pedido.model.User;
+import com.api.pedido.model.dto.UserRequest;
+import com.api.pedido.model.dto.UserResponse;
 import com.api.pedido.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -21,12 +22,19 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> exibirTodos(){
+    public ResponseEntity<List<UserResponse>> exibirTodos(){
         return ResponseEntity.ok().body(userService.findAll());
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable Long id){
+    public ResponseEntity<UserResponse> findById(@PathVariable Long id){
         return ResponseEntity.ok().body(userService.findById(id));
+    }
+
+    @PostMapping(value = "/create")
+    public ResponseEntity<UserResponse> insert(@RequestBody UserRequest request){
+        UserResponse userResponse = userService.insert(request);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userResponse.id()).toUri();
+        return ResponseEntity.created(uri).body(userResponse);
     }
 }

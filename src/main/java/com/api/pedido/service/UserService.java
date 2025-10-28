@@ -2,6 +2,8 @@ package com.api.pedido.service;
 
 
 import com.api.pedido.model.User;
+import com.api.pedido.model.dto.UserRequest;
+import com.api.pedido.model.dto.UserResponse;
 import com.api.pedido.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,13 +17,30 @@ public class UserService {
     private UserRepository userRepository;
 
 
-    public List<User> findAll(){
-        return userRepository.findAll();
+    public UserResponse toResponse(User user){
+        return new UserResponse(
+                user.getId(), user.getName(), user.getEmail(), user.getPhone()
+        );
     }
 
-    public User findById(Long id){
-        return userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Não encontrado esse usuário"));
+    public List<UserResponse> findAll(){
+        return userRepository.findAll().stream().map(this::toResponse).toList();
+    }
+
+    public UserResponse findById(Long id){
+        return toResponse(userRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Não encontrado esse usuário")));
+    }
+
+    public UserResponse insert(UserRequest request){
+        User user = User.builder()
+                .name(request.name())
+                .email(request.email())
+                .phone(request.phone())
+                .password(request.password())
+                .build();
+        userRepository.save(user);
+        return toResponse(user);
     }
 
 

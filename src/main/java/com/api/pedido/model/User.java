@@ -15,6 +15,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class User {
 
 
@@ -33,6 +34,7 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "client")
     @Setter(AccessLevel.NONE)
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     public User(Long id, String name, String email, String phone, String password) {

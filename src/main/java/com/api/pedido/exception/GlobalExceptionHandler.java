@@ -21,4 +21,14 @@ public class GlobalExceptionHandler {
                 request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<StandardError> resourceNotFoundHandler(DataBaseException e, HttpServletRequest request){
+
+        StandardError error = new StandardError(e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }

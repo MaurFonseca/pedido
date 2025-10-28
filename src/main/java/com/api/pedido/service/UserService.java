@@ -1,6 +1,7 @@
 package com.api.pedido.service;
 
 
+import com.api.pedido.exception.DataBaseException;
 import com.api.pedido.exception.ResourceNotFoundException;
 import com.api.pedido.model.User;
 import com.api.pedido.model.dto.UserRequest;
@@ -8,6 +9,8 @@ import com.api.pedido.model.dto.UserResponse;
 import com.api.pedido.model.dto.UserUpdateRequest;
 import com.api.pedido.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -46,7 +49,13 @@ public class UserService {
     }
 
     public void delete(Long id){
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new ResourceNotFoundException("Resource not found, ID: "+ id + " Not Found");
+        }catch (DataIntegrityViolationException e){
+            throw new DataBaseException(e.getMessage());
+        }
     }
 
     public UserResponse update(Long id, UserUpdateRequest request){

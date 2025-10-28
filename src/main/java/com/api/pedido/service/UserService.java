@@ -8,6 +8,7 @@ import com.api.pedido.model.dto.UserRequest;
 import com.api.pedido.model.dto.UserResponse;
 import com.api.pedido.model.dto.UserUpdateRequest;
 import com.api.pedido.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -59,10 +60,14 @@ public class UserService {
     }
 
     public UserResponse update(Long id, UserUpdateRequest request){
-        User user = userRepository.getReferenceById(id);
-        updateUser(user, request);
-        userRepository.save(user);
-        return toResponse(user);
+        try {
+            User user = userRepository.getReferenceById(id);
+            updateUser(user, request);
+            userRepository.save(user);
+            return toResponse(user);
+        }catch (EntityNotFoundException e){
+            throw new ResourceNotFoundException("Resource not found, ID: "+ id + " Not Found");
+        }
     }
 
     private User updateUser(User user, UserUpdateRequest request){

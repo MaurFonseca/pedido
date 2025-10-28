@@ -4,6 +4,7 @@ package com.api.pedido.controller;
 import com.api.pedido.model.User;
 import com.api.pedido.model.dto.UserRequest;
 import com.api.pedido.model.dto.UserResponse;
+import com.api.pedido.model.dto.UserUpdateRequest;
 import com.api.pedido.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,5 +43,11 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<UserResponse> update(@PathVariable Long id, @RequestBody UserUpdateRequest request){
+        UserResponse response = userService.update(id, request);
+        return ResponseEntity.ok().body(response);
     }
 }

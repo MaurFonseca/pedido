@@ -4,6 +4,7 @@ package com.api.pedido.service;
 import com.api.pedido.model.User;
 import com.api.pedido.model.dto.UserRequest;
 import com.api.pedido.model.dto.UserResponse;
+import com.api.pedido.model.dto.UserUpdateRequest;
 import com.api.pedido.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,20 @@ public class UserService {
 
     public void delete(Long id){
         userRepository.deleteById(id);
+    }
+
+    public UserResponse update(Long id, UserUpdateRequest request){
+        User user = userRepository.getReferenceById(id);
+        updateUser(user, request);
+        userRepository.save(user);
+        return toResponse(user);
+    }
+
+    private User updateUser(User user, UserUpdateRequest request){
+        user.setName(request.name());
+        user.setEmail(request.email());
+        user.setPhone(request.phone());
+        return user;
     }
 
 }
